@@ -73,6 +73,10 @@ function PersonalInformation() {
         </Modal.Body>
       </Modal>
       <div className="flex flex-col items-center justify-center min-h-screen">
+        <p className="font-bold">AOL Machine Learning - LC01</p>
+        <p className="font-bold">2602124171 - Hendrik Nicolas Carlo</p>
+        <p className="font-bold">2602121794 - Kelvin Andreas</p>
+        <p className="font-bold">2602128346 - Vincent Tanjaya</p>
         <h1 className="font-extrabold text-3xl">Personal Information</h1>
         <div className="flex flex-col items-center m-4">
           <div className="flex justify-center">
@@ -131,7 +135,7 @@ function PersonalInformation() {
                     id="height"
                     type="number"
                     value={userData.Height || ""}
-                    placeholder="Input your height here..."
+                    placeholder="Input your height in CM in here..."
                     onChange={(e) => handleChange("Height", e.target.value)}
                     required
                   />

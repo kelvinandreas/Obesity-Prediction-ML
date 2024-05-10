@@ -87,10 +87,10 @@ function Habit() {
     } else if (
       userData.FCVC === null ||
       userData.FCVC < 1 ||
-      userData.FCVC > 3
+      userData.FCVC > 10
     ) {
       setModal({
-        message: "Please indicate how often you consume vegetables (1 to 3).",
+        message: "Please indicate how often you consume vegetables (1 to 10).",
         button: "Yes, I'm Understand",
       });
       setOpenModal(true);
@@ -98,11 +98,11 @@ function Habit() {
     } else if (
       userData.CH2O === null ||
       userData.CH2O < 1 ||
-      userData.CH2O > 3
+      userData.CH2O > 10
     ) {
       setModal({
         message:
-          "Please indicate how many glasses of water you consume each day (1 to 3).",
+          "Please indicate how many glasses of water you consume each day (1 to 10).",
         button: "Yes, I'm Understand",
       });
       setOpenModal(true);
@@ -114,18 +114,18 @@ function Habit() {
       });
       setOpenModal(true);
       return;
-    } else if (userData.FAF === null || userData.FAF < 0 || userData.FAF > 3) {
+    } else if (userData.FAF === null || userData.FAF < 1 || userData.FAF > 10){
       setModal({
         message:
-          "Please indicate how often you engage in physical activity (0 to 3).",
+          "Please indicate how often you engage in physical activity (1 to 10).",
         button: "Yes, I'm Understand",
       });
       setOpenModal(true);
       return;
-    } else if (userData.TUE === null || userData.TUE < 0 || userData.TUE > 2) {
+    } else if (userData.TUE === null || userData.TUE < 1 || userData.TUE > 24) {
       setModal({
         message:
-          "Please indicate how much time you spend using technology devices (0 to 2).",
+          "Please indicate how much time you spend using technology devices (1 to 24).",
         button: "Yes, I'm Understand",
       });
       setOpenModal(true);
@@ -138,7 +138,26 @@ function Habit() {
       setOpenModal(true);
     } else {
       try {
-        const result = await hitApi(userData);
+        const postData: UserData  = {
+          Height: (userData.Height ?? 0) / 100,
+          FCVC: userData.FCVC * (3 / 10),
+          CH2O: userData.CH2O * (3 / 10),
+          FAF: userData.FAF * (3 / 10),
+          TUE: userData.TUE * (2 / 24),
+          NCP: userData.NCP,
+          FAVC: userData.FAVC,
+          SMOKE: userData.SMOKE,
+          SCC: userData.SCC,
+          CAEC: userData.CAEC,
+          CALC: userData.CALC,
+          MTRANS: userData.MTRANS,
+          Age: userData.Age,
+          family_history_with_overweight: userData.family_history_with_overweight,
+          Gender: userData.Gender,
+          Weight: userData.Weight
+        };
+        console.log("🚀 ~ postData:", postData);
+        const result = await hitApi(postData);
         setModal({
           message: result.replace("_", " "),
           button: "Ok",
@@ -401,7 +420,7 @@ function Habit() {
               <div className="flex justify-center m-4">
                 <div className="flex flex-col items-center">
                   <h2 className="font-bold pb-3 text-xl flex items-center flex-col">
-                    How often do you consume vegetables, ranging from 1 to 3?
+                    How often do you consume vegetables, ranging from 1 to 10?
                     <div className="w-96 h-96">
                       <Card className="w-full h-full items-center card mr-5 pt-5 mt-3">
                         <img
@@ -414,7 +433,7 @@ function Habit() {
                           name="FCVC"
                           id="FCVC"
                           value={userData.FCVC || ""}
-                          placeholder="Range 1 to 3"
+                          placeholder="Range 1 to 10"
                           onChange={(e) => handleChange("FCVC", e.target.value)}
                           required
                         />
@@ -454,7 +473,7 @@ function Habit() {
                 <div className="flex flex-col items-center">
                   <h2 className="font-bold pb-3 text-xl">
                     How many glasses of water do you consume each day, ranging
-                    from 1 to 3?
+                    from 1 to 10?
                   </h2>
                   <div className="w-96 h-96">
                     <Card className="w-full h-full items-center card mr-5 pt-5 mt-2">
@@ -468,7 +487,7 @@ function Habit() {
                         name="CH2O"
                         id="CH2O"
                         value={userData.CH2O || ""}
-                        placeholder="Range 1 to 3"
+                        placeholder="Range 1 to 10"
                         onChange={(e) => handleChange("CH2O", e.target.value)}
                         required
                       />
@@ -480,7 +499,7 @@ function Habit() {
                 <div className="flex flex-col items-center">
                   <h2 className="font-bold pb-3 text-xl">
                     How often do you engage in physical activity, with a range
-                    from 0 to 3?
+                    from 1 to 10?
                   </h2>
                   <div className="w-96 h-96">
                     <Card className="w-full h-full items-center card mr-5 pt-5 mt-2">
@@ -494,7 +513,7 @@ function Habit() {
                         name="FAF"
                         id="FAF"
                         value={userData.FAF || ""}
-                        placeholder="Range 0 to 3"
+                        placeholder="Range 1 to 10"
                         onChange={(e) => handleChange("FAF", e.target.value)}
                         required
                       />
@@ -508,7 +527,7 @@ function Habit() {
             <div className="flex flex-col items-center">
               <h2 className="font-bold pb-3 text-xl">
                 How much time do you spend using technology devices, with a
-                range from 0 to 2?
+                range from 1 to 24?
               </h2>
               <div className="w-96 h-96">
                 <Card className="w-full h-full items-center card mr-5 pt-5 mt-2">
@@ -522,7 +541,7 @@ function Habit() {
                     name="TUE"
                     id="TUE"
                     value={userData.TUE || ""}
-                    placeholder="Range 0 to 2"
+                    placeholder="Range 1 to 24"
                     onChange={(e) => handleChange("TUE", e.target.value)}
                     required
                   />
