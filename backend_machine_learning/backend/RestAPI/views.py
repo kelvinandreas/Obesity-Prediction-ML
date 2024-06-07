@@ -34,10 +34,9 @@ class Predict(views.APIView):
         for entry in request.data:
             try:
                 df = pd.DataFrame(entry, index=[0])
-                df = label_encoder.transform(df)
-                df = onehot_encoder.transform(df)
                 df = scaler.transform(df)
-                result = list(model.predict(df))
+                df = onehot_encoder.transform(df)
+                result = list(label_encoder.inverse_transform(model.predict(df)))
                 
             except Exception as err:
                 print("Error: ", err)
