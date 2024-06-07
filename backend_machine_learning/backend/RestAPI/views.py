@@ -23,16 +23,20 @@ def index(request):
 
 class Predict(views.APIView):
     def post(self, request):
-        model_path = os.path.join(settings.MODEL_ROOT, 'rfcModel.pkl')
+        model_path = os.path.join(settings.MODEL_ROOT, 'model.joblib')
         
         with open(model_path, 'rb') as file:
-            model = joblib.load(file)
-            encoder = joblib.load(os.path.join(settings.MODEL_ROOT, 'encoder.joblib'))
+            model = joblib.load(file) #TODO: Ganti dengan joblib baru
+            label_encoder = joblib.load(os.path.join(settings.MODEL_ROOT, 'label_encoder.joblib'))
+            scaler = joblib.load(os.path.join(settings.MODEL_ROOT, 'scaler.joblib'))
+            onehot_encoder = joblib.load(os.path.join(settings.MODEL_ROOT, 'onehot_encoder.joblib'))
 
         for entry in request.data:
             try:
                 df = pd.DataFrame(entry, index=[0])
-                df = encoder.transform(df)
+                df = label_encoder.transform(df)
+                df = onehot_encoder.transform(df)
+                df = scaler.transform(df)
                 result = list(model.predict(df))
                 
             except Exception as err:
